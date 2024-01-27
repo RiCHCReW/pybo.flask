@@ -1,0 +1,7 @@
+activate.bat
+deactivate.bat
+
+.idea
+pybo.db
+*.pyc
+__pycache__
