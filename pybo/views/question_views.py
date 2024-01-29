@@ -9,6 +9,8 @@ from pybo.forms import QuestionForm, AnswerForm
 
 bp = Blueprint('question', __name__, url_prefix='/question')
 
+
+#--------------------------------------------------------------------------------------------------
 @bp.route('/list/')
 def _list():
   page = request.args.get('page', type=int, default=1)  # 페이지
@@ -20,6 +22,7 @@ def _list():
   return render_template('question/question_list.html', question_list=question_list)
 
 
+#--------------------------------------------------------------------------------------------------
 @bp.route('/detail/<int:question_id>/')
 def detail(question_id):
   form = AnswerForm()
@@ -27,6 +30,7 @@ def detail(question_id):
   return render_template('question/question_detail.html', question=question, form=form) 
 
 
+#--------------------------------------------------------------------------------------------------
 @bp.route('/create/', methods=('GET', 'POST'))
 def create():
   form = QuestionForm()
@@ -38,3 +42,6 @@ def create():
     return redirect(url_for('main.index'))
   
   return render_template('question/question_form.html', form=form)
+
+
+#--------------------------------------------------------------------------------------------------
