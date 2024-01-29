@@ -11,8 +11,13 @@ bp = Blueprint('question', __name__, url_prefix='/question')
 
 @bp.route('/list/')
 def _list():
-    question_list = Question.query.order_by(Question.create_date.desc())
-    return render_template('question/question_list.html', question_list=question_list)
+  page = request.args.get('page', type=int, default=1)  # 페이지
+  question_list = Question.query.order_by(Question.id.desc())
+  # print(f'페이징 전의 타입 : {type(question_list)}')
+  question_list = question_list.paginate(page=page, per_page=10)  # 페이징 처리
+  # print(f'페이징 후의 타입 : {type(question_list)}')
+
+  return render_template('question/question_list.html', question_list=question_list)
 
 
 @bp.route('/detail/<int:question_id>/')
