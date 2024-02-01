@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
+  <!-- flash 오류 -->
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-danger" role="alert">
+    {{ message }}
+  </div>
+  {% endfor %}
   <!-- 질문 -->
   <h2 class="border-bottom py-2">{{ question.subject }}</h2>
   <div class="card my-3">
@@ -11,6 +17,12 @@
           <div class="mb-2">{{ question.user.username }}</div>
           <div>{{ question.create_date | datetime }}</div>
         </div>
+      </div>
+      <div class"my-3">
+        {% if g.user == question.user %}
+        <a href="{{url_for('question.modify', question_id=question.id)}}"
+          class="btn btn-sm btn-outline-secondary">수정</a>
+        {% endif %}
       </div>
     </div>
   </div>

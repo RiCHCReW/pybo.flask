@@ -13,6 +13,7 @@ class Question(db.Model):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
   # user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=True, server_default="1")
   user = db.relationship('User', backref=db.backref('question_set'))
+  modify_date = db.Column(db.DateTime, nullable=True)
 
 
 #--------------------------------------------------------------------------------------------------
@@ -25,6 +26,7 @@ class Answer(db.Model):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
   # user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=True, server_default="1")
   user = db.relationship('User', backref=db.backref('answer_set'))
+  modify_date = db.Column(db.DateTime, nullable=True)
 
 
 #--------------------------------------------------------------------------------------------------
