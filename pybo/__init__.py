@@ -1,10 +1,19 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import MetaData
 
 import config
 
-db = SQLAlchemy()
+naming_convention = {
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(column_0_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
+
+db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
 from . import models # models에 있는 클래스가 migrate되기 위해서 필요한 라인이다.
 
@@ -13,8 +22,13 @@ def create_app():
     app.config.from_object(config)
     app.jinja_env.line_statement_prefix = '#' # 장고에는 없는 jinja2를 사용하는 플라스크의 특징. 템플릿에서 '{%%}' 대신에 라인 맨 앞에 '#'만 붙이면 된다.
 
+    # ORM
     db.init_app(app)
-    migrate.init_app(app, db)
+    if app.config['SQLALCHEMY_DATABASE_URI'].startswith("sqlite") :
+        migrate.init_app(app, db, render_as_batch=True)
+    else :
+        migrate.init_app(app, db)
+    from . import models
 
     # 블루프린터 설정
     from .views import main_views, question_views, answer_views, auth_views
